@@ -40,7 +40,19 @@
 
   	<ng-container matColumnDef="ipads">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> ipad </th>
-		<td mat-cell *matCellDef="let element"> {{element.department[0].wards[0].ipads[0].nr}} </td>
+		<mat-cell *matCellDef="let element"> 
+      <span *ngFor="let department of element.department">
+        <tr *ngFor="let ward of department.wards">
+          <td *ngFor="let ipads of ward.ipads">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(element) : null"
+                          [checked]="selection.isSelected(element)">
+            </mat-checkbox>
+            {{ipads.nr}} 
+          </td>
+        </tr>
+      </span>
+    </mat-cell>
 	</ng-container>
 
 	<tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>

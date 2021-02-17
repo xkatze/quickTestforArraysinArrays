@@ -1,6 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
+import { SelectionModel } from "@angular/cdk/collections";
 
+export interface Zoneman{
+  zonename: string;
+       department: [{
+        departmentname: string; 
+        wards: [
+          {wardsname: string;
+            ipads: [
+              {nr: number;}
+            ]}
+        ]}
+      ]
+}
 
 @Component({
   selector: 'table-sorting-example',
@@ -11,9 +24,24 @@ export class TableSortingExample implements OnInit {
   displayedColumns: string[] = ['_id', 'name'];
   displayedColumns2: string[] = ['zonename', 'departmentname','wardsname','ipads'];
   dataSource = new MatTableDataSource([]);
-  dataSource2 = new MatTableDataSource([]);
+  dataSource2 = new MatTableDataSource<Zoneman>([]);
+  
+  selection = new SelectionModel<Zoneman>(true, []);
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  numberToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
 
   @ViewChild(MatSort) sort: MatSort;
+
 
   ngOnInit() {
     var elements = [{ _id: 1, name: 'Paul Walker' },
@@ -34,12 +62,12 @@ export class TableSortingExample implements OnInit {
         ]}
       ]}]
 
-    var elements3 = [
+    var elements3: Zoneman = [
       {zonename: "hello",
        department: [{
-        departmentname: 1, 
+        departmentname: "1", 
         wards: [
-          {wardsname: 3,
+          {wardsname: "3",
             ipads: [
               {nr: 1}
             ]}
@@ -47,7 +75,7 @@ export class TableSortingExample implements OnInit {
       ]}]
 
     this.dataSource = new MatTableDataSource(elements);
-    this.dataSource2 = new MatTableDataSource(elements3);
+    this.dataSource2 = new MatTableDataSource<Zoneman>(elements3);
     this.dataSource.sort = this.sort;
   }
 }
