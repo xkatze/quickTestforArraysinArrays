@@ -8,11 +8,29 @@ export interface Zoneman{
         departmentname: string, 
         wards: [
           {wardsname: string,
-            ipads: [
-              {nr: number}
-            ]}
+            ipads: Array<Number>}
         ]}
       ]
+}
+
+export interface Zone{
+  name: string;
+}
+
+export interface Department{
+  name: string;
+  zone: Zone;
+}
+
+export interface Ward{
+  name: string;
+  department: Department;
+  ipads: Array<Ipad>
+}
+
+export interface Ipad{
+  name: string;
+  ward: Ward;
 }
 
 @Component({
@@ -27,6 +45,7 @@ export class TableSortingExample implements OnInit {
   dataSource2 = new MatTableDataSource<Zoneman>([]);
   
   selection = new SelectionModel<Zoneman>(true, []);
+  selectionipad = new SelectionModel<Ipad>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -54,10 +73,7 @@ export class TableSortingExample implements OnInit {
         wards: [
           {wardsname: "3",
             ipads: [
-              {nr: 1},
-              {nr: 12},
-              {nr: 4},
-              {nr: 5}
+              1,12,3,5
             ]}
         ]}
       ]}]
@@ -77,6 +93,11 @@ export class TableSortingExample implements OnInit {
     this.dataSource = new MatTableDataSource(elements);
     this.dataSource2 = new MatTableDataSource<Zoneman>(elements2);
     this.dataSource.sort = this.sort;
+
+  }
+
+  hej(){
+    this.selection.selected.forEach()
   }
 }
 
