@@ -3,13 +3,13 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from "@angular/cdk/collections";
 
 export interface Zoneman{
-  zonename: string;
+  zonename: string,
        department: [{
-        departmentname: string; 
+        departmentname: string, 
         wards: [
-          {wardsname: string;
+          {wardsname: string,
             ipads: [
-              {nr: number;}
+              {nr: number}
             ]}
         ]}
       ]
@@ -47,12 +47,12 @@ export class TableSortingExample implements OnInit {
     var elements = [{ _id: 1, name: 'Paul Walker' },
     { _id: 2, name: 'Lisa' }];
 
-    var elements2 = [
+    var elements2: Zoneman[] = [
       {zonename: "hello",
        department: [{
-        departmentname: 1, 
+        departmentname: "1", 
         wards: [
-          {wardsname: 3,
+          {wardsname: "3",
             ipads: [
               {nr: 1},
               {nr: 12},
@@ -72,10 +72,10 @@ export class TableSortingExample implements OnInit {
               {nr: 1}
             ]}
         ]}
-      ]}]
+      ]}];
 
     this.dataSource = new MatTableDataSource(elements);
-    this.dataSource2 = new MatTableDataSource<Zoneman>(elements3);
+    this.dataSource2 = new MatTableDataSource<Zoneman>(elements2);
     this.dataSource.sort = this.sort;
   }
 }
