@@ -36,26 +36,30 @@
   	<ng-container matColumnDef="wardsname">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> ward </th>
 		<td mat-cell *matCellDef="let element"> 
-      {{element.department[0].wards[0].wardsname}} 
+      <span *ngFor="let department of element.department">
+        <span *ngFor="let ward of department.wards">
+          {{ward.wardsname}} 
+        </span>
+      </span>
       </td>
 	</ng-container>
 
   	<ng-container matColumnDef="ipads">
 		<th mat-header-cell *matHeaderCellDef mat-sort-header> ipad </th>
-		<mat-cell *matCellDef="let element"> 
+		<td mat-cell *matCellDef="let element let p=index"> 
       <span *ngFor="let department of element.department let i=index">
-        <tr *ngFor="let ward of department.wards let j=index">
-          <td *ngFor="let ipads of ward.ipads let k=index">
+        <span *ngFor="let ward of department.wards let j=index">
+          <tr *ngFor="let ipads of ward.ipads let k=index">
             <mat-checkbox (click)="$event.stopPropagation()"
                           (change)="$event ? selection.toggle(element) : null"
                           (change)="lol()"
                           [checked]="selection.isSelected(element)">
             </mat-checkbox>
             {{ipads}} 
-          </td>
-        </tr>
+          </tr>
+        </span>
       </span>
-    </mat-cell>
+    </td>
 	</ng-container>
 
 	<tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>

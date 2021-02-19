@@ -15,11 +15,13 @@ export interface Zoneman{
 
 export interface Zone{
   name: string;
+  deparment: Array<Department>;
 }
 
 export interface Department{
   name: string;
   zone: Zone;
+  ward: Array<Ward>;
 }
 
 export interface Ward{
@@ -43,6 +45,8 @@ export class TableSortingExample implements OnInit {
   displayedColumns2: string[] = ['zonename', 'departmentname','wardsname','ipads'];
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource<Zoneman>([]);
+
+  elements2: Zoneman[];
   
   selection = new SelectionModel<Zoneman>(true, []);
   selectionipad = new SelectionModel<Ipad>(true, []);
@@ -59,6 +63,24 @@ export class TableSortingExample implements OnInit {
       : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
+  selectIpad(first: number, second: number, third: number, fourth: number ){
+    var ipadid = this.elements2[first].department[second].wards[third].ipads[fourth];
+    var zoneid = this.elements2[first.toString()];
+    var departmentid = this.elements2[first].department[second];
+    var wardid = this.elements2[first].department[second].wards[third];
+
+    //skal lige finde en metode som vil give mening tænke arbejde er nederen.
+
+
+    var temp1: Zone = {name: zoneid,
+                      department: zoneid.department};
+
+    var temp2: Department = {name: departmentid.toString(),
+                            zone: temp1,
+                            ward: departmentid.wards};
+
+  }
+
   @ViewChild(MatSort) sort: MatSort;
 
 
@@ -66,16 +88,27 @@ export class TableSortingExample implements OnInit {
     var elements = [{ _id: 1, name: 'Paul Walker' },
     { _id: 2, name: 'Lisa' }];
 
-    var elements2: Zoneman[] = [
+    this.elements2 = [
       {zonename: "hello",
-       department: [{
+       department: [
+        {
         departmentname: "1", 
         wards: [
           {wardsname: "3",
             ipads: [
               1,12,3,5
             ]}
-        ]}
+        ]
+        },
+        {
+          departmentname: "2",
+          wards: [
+            {wardsname: "7",
+            ipads: [
+              1,8,7,6
+            ]}
+          ]
+        }
       ]}]
 
     var elements3: Zoneman = [
@@ -91,13 +124,13 @@ export class TableSortingExample implements OnInit {
       ]}];
 
     this.dataSource = new MatTableDataSource(elements);
-    this.dataSource2 = new MatTableDataSource<Zoneman>(elements2);
+    this.dataSource2 = new MatTableDataSource<Zoneman>(this.elements2);
     this.dataSource.sort = this.sort;
 
   }
 
   hej(){
-    this.selection.selected.forEach()
+    this.selection.selected.forEach();
   }
 }
 
