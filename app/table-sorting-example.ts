@@ -86,22 +86,19 @@ export class TableSortingExample implements OnInit {
     //skal lige finde en metode som vil give mening tænke arbejde er nederen.
   }
 
-  createZones(){
+  createZones() {
+    var buildtarget: Zoneman2;
 
-  var buildtarget: Zoneman2;
-
-  for( let i = 0; i < this.elements2.length; i++){
-    var tempzone = new Zone();
-    tempzone.name = this.elements2[i].zonename;
-      for(let j = 0; this.elements2[i].department.length; j++){
+    for (let i = 0; i < this.elements2.length; i++) {
+      var tempzone = new Zone();
+      tempzone.name = this.elements2[i].zonename;
+      for (let j = 0; this.elements2[i].department.length; j++) {
         var tempdepartment = new Department();
         tempdepartment.name = this.elements2[i].department[j].departmentname;
       }
 
-    buildtarget.zone.push(tempzone)
-  }
-
-    
+      buildtarget.zone.push(tempzone);
+    }
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -166,8 +163,9 @@ export class TableSortingExample implements OnInit {
 
   hello() {
     this.yow = " ";
-    this.selectionipad.selected.forEach(department =>
-    this.yow += department.name);
+    this.selectionipad.selected.forEach(
+      department => (this.yow += department.name)
+    );
   }
 }
 
