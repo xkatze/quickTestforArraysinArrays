@@ -23,7 +23,7 @@ export class Zone {
 
 export class Department {
   name: string;
-  //parent: Zone;
+  parent: Zone;
   child: Array<Ward>;
 }
 
@@ -53,15 +53,15 @@ export class TableSortingExample implements OnInit {
   ];
   dataSource = new MatTableDataSource([]);
   dataSource2 = new MatTableDataSource<Zoneman>([]);
-  dataSource3 = new MatTableDataSource<Zone>([]);
+  dataSource3 = new MatTableDataSource<Zoneman2>([]);
 
   elements2: Zoneman[];
-  elements4: Zone[];
+  elements4: Zoneman2[];
 
   yow: string;
 
   selection = new SelectionModel<Zoneman>(true, []);
-  selectionipad = new SelectionModel<Ipad>(true, []);
+  selectionipad = new SelectionModel<Department>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -84,6 +84,13 @@ export class TableSortingExample implements OnInit {
     var wardid = this.elements2[first].department[second].wards[third];
 
     //skal lige finde en metode som vil give mening tænke arbejde er nederen.
+  }
+
+  createZones(){
+
+  
+
+    
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -111,9 +118,11 @@ export class TableSortingExample implements OnInit {
 
     var tempzone = new Zone();
 
-    var temppdepartment = null; // new Department();
+    var temppdepartment = new Department();
 
-    //temppdepartment.parent = tempzone;
+    var tempward = new Ward();
+
+    temppdepartment.parent = tempzone;
     tempzone.name = "13";
     temppdepartment.name = "2";
 
@@ -121,7 +130,7 @@ export class TableSortingExample implements OnInit {
 
     tempzoneman.zone = tempzone;
 
-    this.elements4 = [tempzone];
+    this.elements4 = [tempzoneman];
 
     var elements3: Zoneman = [
       {
@@ -137,15 +146,17 @@ export class TableSortingExample implements OnInit {
 
     this.dataSource = new MatTableDataSource(elements);
     this.dataSource2 = new MatTableDataSource<Zoneman>(this.elements2);
-    this.dataSource3 = new MatTableDataSource<Zone>(this.elements4);
+    this.dataSource3 = new MatTableDataSource<Zoneman2>(this.elements4);
     this.dataSource.sort = this.sort;
 
     //this.elements4.forEach(zone => zone.zone.forEach(name => this.yow = name.name));
-    console.log(JSON.stringify(this.elements4));
+    //console.log(JSON.stringify(this.elements4));
   }
 
-  hej() {
-    this.selection.selected.forEach();
+  hello() {
+    this.yow = " ";
+    this.selectionipad.selected.forEach(department =>
+    this.yow += department.name);
   }
 }
 

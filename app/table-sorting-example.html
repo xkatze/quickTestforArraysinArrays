@@ -25,14 +25,26 @@
 		<ng-container matColumnDef="zonename">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header> zone </th>
 			<td mat-cell  *matCellDef="let element">
-				<p *ngIf="element"> {{element.name}}</p>
+        <span *ngFor="let zone of element.zone">
+				{{zone.name}}
+        </span>
 			</td>
 		</ng-container>
 
 		<!-- Name Column -->
 		<ng-container matColumnDef="departmentname">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header> department </th>
-			<td mat-cell *matCellDef="let element"></td>
+			<td mat-cell *matCellDef="let element">
+        <span *ngFor="let zone of element.zone">
+          <span *ngFor="let department of zone.child">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selectionipad.toggle(department) : null"
+                        [checked]="selectionipad.isSelected(department)">        
+          </mat-checkbox>
+        {{department.name}}
+          </span>
+        </span>
+      </td>
 		</ng-container>
 
 		<ng-container matColumnDef="wardsname">
@@ -72,6 +84,8 @@
 
 	<p>{{yow}}</p>
 
+
+  <button (click)="hello()">test mig</button>
 </div>
 <!-- Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
