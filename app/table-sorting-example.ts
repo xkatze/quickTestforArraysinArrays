@@ -13,7 +13,7 @@ export interface Zoneman {
 }
 
 export class Zoneman2 {
-  zone: Zone;
+  zone: Zone[];
 }
 
 export class Zone {
@@ -88,7 +88,18 @@ export class TableSortingExample implements OnInit {
 
   createZones(){
 
-  
+  var buildtarget: Zoneman2;
+
+  for( let i = 0; i < this.elements2.length; i++){
+    var tempzone = new Zone();
+    tempzone.name = this.elements2[i].zonename;
+      for(let j = 0; this.elements2[i].department.length; j++){
+        var tempdepartment = new Department();
+        tempdepartment.name = this.elements2[i].department[j].departmentname;
+      }
+
+    buildtarget.zone.push(tempzone)
+  }
 
     
   }
@@ -128,7 +139,7 @@ export class TableSortingExample implements OnInit {
 
     tempzone.child = [temppdepartment];
 
-    tempzoneman.zone = tempzone;
+    tempzoneman.zone = [tempzone];
 
     this.elements4 = [tempzoneman];
 
