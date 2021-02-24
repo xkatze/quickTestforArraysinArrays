@@ -38,6 +38,12 @@ export class Ipad {
   parent: Ward;
 }
 
+export class Requester{
+
+   
+
+}
+
 @Component({
   selector: "table-sorting-example",
   styleUrls: ["table-sorting-example.css"],
@@ -212,6 +218,10 @@ export class TableSortingExample implements OnInit {
   hello2(){
     this.yow2 = " ";
     this.selectiondepartment.selected.forEach(ipad =>  (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name))
+  }
+
+  hello3(){
+
   }
 }
 
