@@ -59,9 +59,13 @@ export class TableSortingExample implements OnInit {
   elements4: Zoneman2[];
 
   yow: string;
+  yow1: string;
+  yow2: string;
 
   selection = new SelectionModel<Zoneman>(true, []);
   selectionipad = new SelectionModel<Department>(true, []);
+  selectionward = new SelectionModel<Ward>(true, []);
+  selectiondepartment = new SelectionModel<Ipad>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -87,15 +91,20 @@ export class TableSortingExample implements OnInit {
   }
 
   createZones() {
-    var buildtarget: Zoneman2;
+    var buildtarget: Zoneman2 = new Zoneman2();
+    buildtarget.zone = [];
 
     for (let i = 0; i < this.elements2.length; i++) {
       var tempzone = new Zone();
       tempzone.name = this.elements2[i].zonename;
-      for (let j = 0; this.elements2[i].department.length; j++) {
+
+      tempzone.child = [];
+      for (let j = 0; j < this.elements2[i].department.length; j++) {
         var tempdepartment = new Department();
 
         tempdepartment.name = this.elements2[i].department[j].departmentname;
+
+        tempdepartment.child = [];
         tempdepartment.parent = tempzone;
 
         for (let k = 0; k < this.elements2[i].department[j].wards.length; k++) {
@@ -103,12 +112,10 @@ export class TableSortingExample implements OnInit {
 
           tempward.name = this.elements2[i].department[j].wards[k].wardsname;
           tempward.parent = tempdepartment;
+          tempward.child = [];
 
-          for (
-            let p = 0;
-            p < this.elements2[i].department[j].wards[k].ipads.length;
-            p++
-          ) {
+          for (let p = 0; p < this.elements2[i].department[j].wards[k].ipads.length;
+            p++) {
             var tempipad = new Ipad();
 
             tempipad.name = this.elements2[i].department[j].wards[k].ipads[
@@ -195,6 +202,16 @@ export class TableSortingExample implements OnInit {
     this.selectionipad.selected.forEach(
       department => (this.yow += department.name)
     );
+  }
+
+  hello1(){
+    this.yow1= " ";
+    this.selectionward.selected.forEach(ward => (this.yow1 += " " + ward.name + " with parent " + ward.parent.name))
+  }
+
+  hello2(){
+    this.yow2 = " ";
+    this.selectiondepartment.selected.forEach(ipad =>  (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name))
   }
 }
 

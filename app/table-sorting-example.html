@@ -24,8 +24,8 @@
 		<!-- Position Column -->
 		<ng-container matColumnDef="zonename">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header> zone </th>
-			<td mat-cell  *matCellDef="let element">
-        <span *ngFor="let zone of element.zone">
+			<td mat-cell *matCellDef="let element">
+				<span *ngFor="let zone of element.zone">
 				{{zone.name}}
         </span>
 			</td>
@@ -35,44 +35,53 @@
 		<ng-container matColumnDef="departmentname">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header> department </th>
 			<td mat-cell *matCellDef="let element">
-        <span *ngFor="let zone of element.zone">
-          <span *ngFor="let department of zone.child">
+				<span *ngFor="let zone of element.zone">
+          <tr *ngFor="let department of zone.child">
           <mat-checkbox (click)="$event.stopPropagation()"
                         (change)="$event ? selectionipad.toggle(department) : null"
                         [checked]="selectionipad.isSelected(department)">        
           </mat-checkbox>
         {{department.name}}
-          </span>
+          </tr>
         </span>
-      </td>
+			</td>
 		</ng-container>
 
 		<ng-container matColumnDef="wardsname">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header> ward </th>
 			<td mat-cell *matCellDef="let element">
-				<span *ngFor="let department of element.department">
-        <span *ngFor="let ward of department.wards">
-          {{ward.wardsname}} 
-        </span>
+				<span *ngFor="let zone of element.zone">
+          <tr *ngFor="let department of zone.child">
+            <span *ngFor="let ward of department.child">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selectionward.toggle(ward) : null"
+                            [checked]="selectionward.isSelected(ward)">        
+              </mat-checkbox> 
+              {{ward.name}} 
+            </span>
+				</tr>
 				</span>
 			</td>
 		</ng-container>
 
 		<ng-container matColumnDef="ipads">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header> ipad </th>
-			<td mat-cell *matCellDef="let element let p=index">
-				<span *ngFor="let department of element.department let i=index">
-        <span *ngFor="let ward of department.wards let j=index">
-          <tr *ngFor="let ipads of ward.ipads let k=index">
+			<td mat-cell *matCellDef="let element">
+				<span *ngFor="let zone of element.zone">
+        <tr *ngFor="let department of zone.child">
+          <td>
+          <span *ngFor="let ward of department.child">
+            <tr *ngFor="let ipad of ward.child">
             <mat-checkbox (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(element) : null"
-                          (change)="lol()"
-                          [checked]="selection.isSelected(element)">
+                          (change)="$event ? selectiondepartment.toggle(ipad) : null"
+                          [checked]="selectiondepartment.isSelected(ipad)">
             </mat-checkbox>
-            {{ipads}} 
-          </tr>
-        </span>
-				</span>
+            {{ipad.name}} 
+            </tr>
+          </span>
+			</td>
+			</tr>
+			</span>
 			</td>
 		</ng-container>
 
@@ -84,8 +93,24 @@
 
 	<p>{{yow}}</p>
 
+	<br>
 
-  <button (click)="hello()">test mig</button>
+	<p>{{yow1}}</p>
+
+	<br>
+
+	<p>{{yow2}}</p>
+
+	<br>
+
+
+
+
+	<button (click)="hello()">test mig</button>
+	<button (click)="hello1()">test mig1</button>
+	<button (click)="hello2()">test mig2</button>
+
+	<button (vlick)="hello3()">fuld test</button>
 </div>
 <!-- Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
