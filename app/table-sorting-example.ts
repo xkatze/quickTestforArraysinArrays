@@ -40,7 +40,10 @@ export class Ipad {
 
 export class Requester{
 
-   
+  zone: string;
+  department: string;
+  ward: string;
+  ipad: string;
 
 }
 
@@ -67,6 +70,8 @@ export class TableSortingExample implements OnInit {
   yow: string;
   yow1: string;
   yow2: string;
+
+  yow3: string;
 
   selection = new SelectionModel<Zoneman>(true, []);
   selectionipad = new SelectionModel<Department>(true, []);
@@ -113,12 +118,14 @@ export class TableSortingExample implements OnInit {
         tempdepartment.child = [];
         tempdepartment.parent = tempzone;
 
+
         for (let k = 0; k < this.elements2[i].department[j].wards.length; k++) {
           var tempward = new Ward();
 
           tempward.name = this.elements2[i].department[j].wards[k].wardsname;
           tempward.parent = tempdepartment;
           tempward.child = [];
+          //tempward.parent.child.push(tempward)
 
           for (let p = 0; p < this.elements2[i].department[j].wards[k].ipads.length;
             p++) {
@@ -128,6 +135,7 @@ export class TableSortingExample implements OnInit {
               p
             ].toString();
             tempipad.parent = tempward;
+            //tempipad.parent.child.push(tempipad)
 
             tempward.child.push(tempipad);
           }
@@ -140,6 +148,13 @@ export class TableSortingExample implements OnInit {
     }
 
     this.elements4 = [buildtarget];
+  }
+
+  upwardsSelectIpad(spad: Ipad){
+    this.selectionward.select(spad.parent);
+    this.selectionipad.select(spad.parent.parent);
+
+    this.selectiondepartment.toggle(spad);
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -217,10 +232,28 @@ export class TableSortingExample implements OnInit {
 
   hello2(){
     this.yow2 = " ";
-    this.selectiondepartment.selected.forEach(ipad =>  (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name))
+    this.selectiondepartment.selected.forEach(ipad =>  (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name));
+    this.yow3 = "parent has child: ";
+    this.selectiondepartment.selected.forEach(ipad => (ipad.parent.child.forEach(ipadparent => this.yow3 += ipadparent.name + " ")));
   }
 
   hello3(){
+
+    var shower: Array<Requester>;
+    shower = [];
+
+    if(this.selectiondepartment.selected.length != 0){
+      for(let i = 0; i < this.selectiondepartment.selected.length; i++){
+        var temp = new Requester();
+        temp.ipad = this.selectiondepartment.selected[i].name;
+        temp.ward = this.selectiondepartment.selected[i].parent.name;
+        temp.department = this.selectiondepartment.selected[i].parent.parent.name;
+        shower.push(temp);
+      }
+    }
+
+    
+    var show = new Requester();
 
   }
 }

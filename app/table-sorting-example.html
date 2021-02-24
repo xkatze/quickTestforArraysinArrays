@@ -1,24 +1,4 @@
 <div>
-	<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-		<!-- Position Column -->
-		<ng-container matColumnDef="_id">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-			<td mat-cell *matCellDef="let element"> {{element._id}} </td>
-		</ng-container>
-
-		<!-- Name Column -->
-		<ng-container matColumnDef="name">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-			<td mat-cell *matCellDef="let element"> {{element.name}} </td>
-		</ng-container>
-
-		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-	</table>
-</div>
-
-<div>
 	<table mat-table [dataSource]="dataSource3" matSort class="mat-elevation-z8">
 
 		<!-- Position Column -->
@@ -73,7 +53,7 @@
           <span *ngFor="let ward of department.child">
             <tr *ngFor="let ipad of ward.child">
             <mat-checkbox (click)="$event.stopPropagation()"
-                          (change)="$event ? selectiondepartment.toggle(ipad) : null"
+                          (change)="$event ? upwardsSelectIpad(ipad) : null"
                           [checked]="selectiondepartment.isSelected(ipad)">
             </mat-checkbox>
             {{ipad.name}} 
@@ -102,6 +82,8 @@
 	<p>{{yow2}}</p>
 
 	<br>
+
+  <p>{{yow3}}</p>
 
 
 
