@@ -94,11 +94,39 @@ export class TableSortingExample implements OnInit {
       tempzone.name = this.elements2[i].zonename;
       for (let j = 0; this.elements2[i].department.length; j++) {
         var tempdepartment = new Department();
-        tempdepartment.name = this.elements2[i].department[j].departmentname;
-      }
 
+        tempdepartment.name = this.elements2[i].department[j].departmentname;
+        tempdepartment.parent = tempzone;
+
+        for (let k = 0; k < this.elements2[i].department[j].wards.length; k++) {
+          var tempward = new Ward();
+
+          tempward.name = this.elements2[i].department[j].wards[k].wardsname;
+          tempward.parent = tempdepartment;
+
+          for (
+            let p = 0;
+            p < this.elements2[i].department[j].wards[k].ipads.length;
+            p++
+          ) {
+            var tempipad = new Ipad();
+
+            tempipad.name = this.elements2[i].department[j].wards[k].ipads[
+              p
+            ].toString();
+            tempipad.parent = tempward;
+
+            tempward.child.push(tempipad);
+          }
+
+          tempdepartment.child.push(tempward);
+        }
+        tempzone.child.push(tempdepartment);
+      }
       buildtarget.zone.push(tempzone);
     }
+
+    this.elements4 = [buildtarget];
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -122,7 +150,8 @@ export class TableSortingExample implements OnInit {
       }
     ];
 
-    var tempzoneman = new Zoneman2();
+    this.createZones();
+    /*var tempzoneman = new Zoneman2();
 
     var tempzone = new Zone();
 
@@ -138,7 +167,7 @@ export class TableSortingExample implements OnInit {
 
     tempzoneman.zone = [tempzone];
 
-    this.elements4 = [tempzoneman];
+    this.elements4 = [tempzoneman];*/
 
     var elements3: Zoneman = [
       {
