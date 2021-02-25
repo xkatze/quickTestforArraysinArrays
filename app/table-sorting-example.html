@@ -18,7 +18,7 @@
 				<span *ngFor="let zone of element.zone">
           <tr *ngFor="let department of zone.child">
           <mat-checkbox (click)="$event.stopPropagation()"
-                        (change)="$event ? selectionipad.toggle(department) : null"
+                        (change)="$event ? selectionward.toggle(department) : null"
                         [checked]="selectionipad.isSelected(department)">        
           </mat-checkbox>
         {{department.name}}

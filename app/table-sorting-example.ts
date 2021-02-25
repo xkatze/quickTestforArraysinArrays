@@ -16,35 +16,41 @@ export class Zoneman2 {
   zone: Zone[];
 }
 
+export interface group{
+
+  name: string;
+  parent: group;
+  child: Array<group>;
+
+} 
+
 export class Zone {
   name: string;
-  child: Array<Department>;
+  child: Array<group>;
 }
 
-export class Department {
+export class Department implements group{
   name: string;
-  parent: Zone;
-  child: Array<Ward>;
+  parent: group;
+  child: Array<group>;
 }
 
 export class Ward {
   name: string;
-  parent: Department;
-  child: Array<Ipad>;
+  parent: group;
+  child: Array<group>;
 }
 
 export class Ipad {
   name: string;
-  parent: Ward;
+  parent: group;
 }
 
-export class Requester{
-
+export class Requester {
   zone: string;
   department: string;
   ward: string;
   ipad: string;
-
 }
 
 @Component({
@@ -67,6 +73,8 @@ export class TableSortingExample implements OnInit {
   elements2: Zoneman[];
   elements4: Zoneman2[];
 
+  index: Array<number>;
+
   yow: string;
   yow1: string;
   yow2: string;
@@ -75,7 +83,7 @@ export class TableSortingExample implements OnInit {
 
   selection = new SelectionModel<Zoneman>(true, []);
   selectionipad = new SelectionModel<Department>(true, []);
-  selectionward = new SelectionModel<Ward>(true, []);
+  selectionward = new SelectionModel<group>(true, []);
   selectiondepartment = new SelectionModel<Ipad>(true, []);
 
   isAllSelected() {
@@ -118,7 +126,6 @@ export class TableSortingExample implements OnInit {
         tempdepartment.child = [];
         tempdepartment.parent = tempzone;
 
-
         for (let k = 0; k < this.elements2[i].department[j].wards.length; k++) {
           var tempward = new Ward();
 
@@ -127,8 +134,11 @@ export class TableSortingExample implements OnInit {
           tempward.child = [];
           //tempward.parent.child.push(tempward)
 
-          for (let p = 0; p < this.elements2[i].department[j].wards[k].ipads.length;
-            p++) {
+          for (
+            let p = 0;
+            p < this.elements2[i].department[j].wards[k].ipads.length;
+            p++
+          ) {
             var tempipad = new Ipad();
 
             tempipad.name = this.elements2[i].department[j].wards[k].ipads[
@@ -150,7 +160,7 @@ export class TableSortingExample implements OnInit {
     this.elements4 = [buildtarget];
   }
 
-  upwardsSelectIpad(spad: Ipad){
+  upwardsSelectIpad(spad: Ipad) {
     this.selectionward.select(spad.parent);
     this.selectionipad.select(spad.parent.parent);
 
@@ -220,44 +230,96 @@ export class TableSortingExample implements OnInit {
 
   hello() {
     this.yow = " ";
-    this.selectionipad.selected.forEach(
-      department => (this.yow += department.name)
+    this.selectionward.selected.forEach(department => {
+      
+      //this.yow += typeof department == typeof Ward )
+
+    console.log(typeof department);             // == "function"
+console.log(typeof department);            // == "object"
+
+console.log(department instanceof Department);     // == true
+console.log("3"+ department.constructor.name);   // == "Foo"
+console.log("4"+department.name )               // == "Foo"    
+
+console.log( Ward.prototype.isPrototypeOf(department)); 
+    }
+    );
+  }
+  
+
+  hello1() {
+    this.yow1 = " ";
+    this.selectionward.selected.forEach(
+      ward =>
+        (this.yow1 += " " + ward.name + " with parent " + ward.parent.name)
     );
   }
 
-  hello1(){
-    this.yow1= " ";
-    this.selectionward.selected.forEach(ward => (this.yow1 += " " + ward.name + " with parent " + ward.parent.name))
-  }
-
-  hello2(){
+  hello2() {
     this.yow2 = " ";
-    this.selectiondepartment.selected.forEach(ipad =>  (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name));
+    this.selectiondepartment.selected.forEach(
+      ipad =>
+        (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name)
+    );
     this.yow3 = "parent has child: ";
-    this.selectiondepartment.selected.forEach(ipad => (ipad.parent.child.forEach(ipadparent => this.yow3 += ipadparent.name + " ")));
+    this.selectiondepartment.selected.forEach(ipad =>
+      ipad.parent.child.forEach(
+        ipadparent => (this.yow3 += ipadparent.name + " ")
+      )
+    );
   }
 
-  hello3(){
-
+  hello3() {
     var shower: Array<Requester>;
     shower = [];
 
-    if(this.selectiondepartment.selected.length != 0){
-      for(let i = 0; i < this.selectiondepartment.selected.length; i++){
-        var temp = new Requester();
-        temp.ipad = this.selectiondepartment.selected[i].name;
-        temp.ward = this.selectiondepartment.selected[i].parent.name;
-        temp.department = this.selectiondepartment.selected[i].parent.parent.name;
-        shower.push(temp);
+    if (this.selectionipad.selected.length != 0) {
+      for (let i = 0; i < this.selectionipad.selected.length; i++) {
+       // this.requestSelector(this.selectionward.selected[i]);
+
+        var tempdepartment: Department = this.selectionipad.selected[i];
+        if (this.selectionward.selected.length != 0) {
+          for (let j = 0; j < tempdepartment.child.length; j++) {
+
+            var tempward: Ward = tempdepartment.child[j];
+            if(this.selectiondepartment.selected.length != 0){
+
+              for (let k = 0; k < this.selectiondepartment.selected.length; k++) {
+              var tempRequest: Requester;
+
+              //tilføj et chartDataRequest
+
+
+              tempdepartment
+
+             }
+            }
+          }
+        }
       }
     }
 
-    
     var show = new Requester();
+  }
 
+  requestSelector(group: group){
+   var anyChildren = group.child.find(elem => {
+      return this.selectionward.isSelected(elem)
+    })
+    if(!anyChildren){
+    for (let i = 0; i < group.child.length; i++) {
+      this.requestSelector(group.child[i])
+    }
+
+    if(Department.prototype.isPrototypeOf(group)){
+      
+    }else if (Ward.prototype.isPrototypeOf(group)){
+    this.selectionward.select(group)
+    }else if (Ipad.prototype.isPrototypeOf(group)){
+    }
+  }
   }
 }
-
 /**  Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
     can be found in the LICENSE file at http://angular.io/license */
