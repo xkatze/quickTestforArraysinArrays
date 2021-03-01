@@ -19,7 +19,7 @@
           <tr *ngFor="let department of zone.child">
           <mat-checkbox (click)="$event.stopPropagation()"
                         (change)="$event ? upwardsSelectIpad(department) : null"
-                        (change)="$event ? selectionipad.toggle(department) : null"
+                        (change)="$event ? selectiondepartment.toggle(department) : null"
                         [checked]="selectionGroup.isSelected(department)">        
           </mat-checkbox>
         {{department.name}}
@@ -36,7 +36,7 @@
             <span *ngFor="let ward of department.child">
               <mat-checkbox (click)="$event.stopPropagation()"
                             (change)="$event ? upwardsSelectIpad(ward) : null"
-                            (chnage)="$event ? selectionward.toggle(ward) : null"
+                            (change)="$event ? selectionward.toggle(ward) : null"
                             [checked]="selectionGroup.isSelected(ward)">        
               </mat-checkbox> 
               {{ward.name}} 
@@ -56,7 +56,7 @@
             <tr *ngFor="let ipad of ward.child">
             <mat-checkbox (click)="$event.stopPropagation()"
                           (change)="$event ? upwardsSelectIpad(ipad) : null"
-                          (change)="$event ? selectiondepartment.toggle(ipad) : null"
+                          (change)="$event ? selectionipad.toggle(ipad) : null"
                           [checked]="selectionGroup.isSelected(ipad)">
             </mat-checkbox>
             {{ipad.name}} 
@@ -86,7 +86,7 @@
 
 	<br>
 
-  <p>{{yow3}}</p>
+	<p>{{yow3}}</p>
 
 
 

@@ -170,20 +170,20 @@ export class TableSortingExample implements OnInit {
     }else if(Department.prototype.isPrototypeOf(spad)){
 
     }else if(Ward.prototype.isPrototypeOf(spad)){
-      if(!this.selectionGroup.isSelected(spad)){
-        this.selectionGroup.toggle(spad.parent);
-        this.selectiondepartment.toggle(spad.parent);
+      if(!spad.parent.child.find(elem => {return this.selectionGroup.isSelected(elem); })){
+        this.selectionGroup.deselect(spad.parent);
+        this.selectiondepartment.deselect(spad.parent);
       }else{
         this.selectionGroup.select(spad.parent);
         this.selectiondepartment.select(spad.parent);
       }
 
     }else if(Ipad.prototype.isPrototypeOf(spad)){
-      if(!this.selectionGroup.isSelected(spad)){
-        this.selectionGroup.toggle(spad.parent);
-        this.selectionGroup.toggle(spad.parent.parent);
-        this.selectionward.toggle(spad.parent);
-        this.selectiondepartment.toggle(spad.parent.parent);
+      if(!spad.parent.child.find(elem => {return this.selectionGroup.isSelected(elem); })){
+        this.selectionGroup.deselect(spad.parent);
+        this.selectionGroup.deselect(spad.parent.parent);
+        this.selectionward.deselect(spad.parent);
+        this.selectiondepartment.deselect(spad.parent.parent);
       }else{
         this.selectionGroup.select(spad.parent);
         this.selectionGroup.select(spad.parent.parent);
@@ -295,23 +295,25 @@ export class TableSortingExample implements OnInit {
     shower = [];
     console.log("hej3");
     var logman = 0;
-    if (this.selectionipad.selected.length != 0) {
-      for (let i = 0; i < this.selectionipad.selected.length; i++) {
+    if (this.selectiondepartment.selected.length != 0) {
+      for (let i = 0; i < this.selectiondepartment.selected.length; i++) {
         console.log("hej");
-        this.requestSelector(this.selectionipad.selected[i]);
+        this.requestSelector(this.selectiondepartment.selected[i]);
 
-        var tempdepartment: Department = this.selectionipad.selected[i];
+        var tempdepartment: Department = this.selectiondepartment.selected[i];
         if (this.selectionward.selected.length != 0) {
-          this.requestSelector(this.selectionward.selected[i]);
+          console.log("ward2")
           for (let j = 0; j < tempdepartment.child.length; j++) {
+            this.requestSelector(this.selectionward.selected[j]);
+            console.log("ward");
             var tempward: Ward = tempdepartment.child[j];
-            if (this.selectiondepartment.selected.length != 0) {
+            if (this.selectionipad.selected.length != 0) {
               for (
                 let k = 0;
-                k < this.selectiondepartment.selected.length;
+                k < this.selectionipad.selected.length;
                 k++
               ) {
-                this.requestSelector(this.selectiondepartment.selected[i]);
+                this.requestSelector(this.selectionipad.selected[k]);
                 var tempRequest: Requester;
                 
                 logman++;
@@ -332,6 +334,7 @@ export class TableSortingExample implements OnInit {
   }
 
   requestSelector(group: group) {
+     console.log("hej6");
     var anyChildren = group.child.find(elem => {
       return this.selectionGroup.isSelected(elem);
     });
@@ -342,15 +345,15 @@ export class TableSortingExample implements OnInit {
         console.log("hej2");
         this.requestSelector(group.child[i]);
       }
-
-      if (Department.prototype.isPrototypeOf(group)) {
-        this.selectionipad.select(group);
+    }
+  
+   if (Department.prototype.isPrototypeOf(group)) {
+        this.selectiondepartment.select(group);
       } else if (Ward.prototype.isPrototypeOf(group)) {
         this.selectionward.select(group);
       } else if (Ipad.prototype.isPrototypeOf(group)) {
-        this.selectiondepartment.select(group);
+        this.selectionipad.select(group);
       }
-    }
   }
 }
 /**  Copyright 2018 Google Inc. All Rights Reserved.
