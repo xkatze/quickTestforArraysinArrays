@@ -18,8 +18,9 @@
 				<span *ngFor="let zone of element.zone">
           <tr *ngFor="let department of zone.child">
           <mat-checkbox (click)="$event.stopPropagation()"
-                        (change)="$event ? selectionward.toggle(department) : null"
-                        [checked]="selectionipad.isSelected(department)">        
+                        (change)="$event ? upwardsSelectIpad(department) : null"
+                        (change)="$event ? selectionipad.toggle(department) : null"
+                        [checked]="selectionGroup.isSelected(department)">        
           </mat-checkbox>
         {{department.name}}
           </tr>
@@ -34,8 +35,9 @@
           <tr *ngFor="let department of zone.child">
             <span *ngFor="let ward of department.child">
               <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selectionward.toggle(ward) : null"
-                            [checked]="selectionward.isSelected(ward)">        
+                            (change)="$event ? upwardsSelectIpad(ward) : null"
+                            (chnage)="$event ? selectionward.toggle(ward) : null"
+                            [checked]="selectionGroup.isSelected(ward)">        
               </mat-checkbox> 
               {{ward.name}} 
             </span>
@@ -54,7 +56,8 @@
             <tr *ngFor="let ipad of ward.child">
             <mat-checkbox (click)="$event.stopPropagation()"
                           (change)="$event ? upwardsSelectIpad(ipad) : null"
-                          [checked]="selectiondepartment.isSelected(ipad)">
+                          (change)="$event ? selectiondepartment.toggle(ipad) : null"
+                          [checked]="selectionGroup.isSelected(ipad)">
             </mat-checkbox>
             {{ipad.name}} 
             </tr>
@@ -92,7 +95,7 @@
 	<button (click)="hello1()">test mig1</button>
 	<button (click)="hello2()">test mig2</button>
 
-	<button (vlick)="hello3()">fuld test</button>
+	<button (click)="hello3()">fuld test</button>
 </div>
 <!-- Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that

@@ -16,34 +16,34 @@ export class Zoneman2 {
   zone: Zone[];
 }
 
-export interface group{
-
-  name: string;
-  parent: group;
-  child: Array<group>;
-
-} 
-
-export class Zone {
-  name: string;
-  child: Array<group>;
-}
-
-export class Department implements group{
+export interface group {
   name: string;
   parent: group;
   child: Array<group>;
 }
 
-export class Ward {
+export class Zone implements group {
+  parent: group;
+  name: string;
+  child: Array<group>;
+}
+
+export class Department implements group {
   name: string;
   parent: group;
   child: Array<group>;
 }
 
-export class Ipad {
+export class Ward implements group {
   name: string;
   parent: group;
+  child: Array<group>;
+}
+
+export class Ipad implements group {
+  name: string;
+  parent: group;
+  child: Array<group>;
 }
 
 export class Requester {
@@ -83,7 +83,8 @@ export class TableSortingExample implements OnInit {
 
   selection = new SelectionModel<Zoneman>(true, []);
   selectionipad = new SelectionModel<Department>(true, []);
-  selectionward = new SelectionModel<group>(true, []);
+  selectionward = new SelectionModel<Ward>(true, []);
+  selectionGroup = new SelectionModel<group>(true, []);
   selectiondepartment = new SelectionModel<Ipad>(true, []);
 
   isAllSelected() {
@@ -145,6 +146,7 @@ export class TableSortingExample implements OnInit {
               p
             ].toString();
             tempipad.parent = tempward;
+            tempipad.child = [];
             //tempipad.parent.child.push(tempipad)
 
             tempward.child.push(tempipad);
@@ -160,11 +162,38 @@ export class TableSortingExample implements OnInit {
     this.elements4 = [buildtarget];
   }
 
-  upwardsSelectIpad(spad: Ipad) {
-    this.selectionward.select(spad.parent);
-    this.selectionipad.select(spad.parent.parent);
+  upwardsSelectIpad(spad: group) {
 
-    this.selectiondepartment.toggle(spad);
+    this.selectionGroup.toggle(spad);
+    if(Zone.prototype.isPrototypeOf(spad)){
+
+    }else if(Department.prototype.isPrototypeOf(spad)){
+
+    }else if(Ward.prototype.isPrototypeOf(spad)){
+      if(!this.selectionGroup.isSelected(spad)){
+        this.selectionGroup.toggle(spad.parent);
+        this.selectiondepartment.toggle(spad.parent);
+      }else{
+        this.selectionGroup.select(spad.parent);
+        this.selectiondepartment.select(spad.parent);
+      }
+
+    }else if(Ipad.prototype.isPrototypeOf(spad)){
+      if(!this.selectionGroup.isSelected(spad)){
+        this.selectionGroup.toggle(spad.parent);
+        this.selectionGroup.toggle(spad.parent.parent);
+        this.selectionward.toggle(spad.parent);
+        this.selectiondepartment.toggle(spad.parent.parent);
+      }else{
+        this.selectionGroup.select(spad.parent);
+        this.selectionGroup.select(spad.parent.parent);
+        this.selectionward.select(spad.parent);
+        this.selectiondepartment.select(spad.parent.parent);
+      }
+    }
+    
+
+    
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -182,7 +211,10 @@ export class TableSortingExample implements OnInit {
           },
           {
             departmentname: "2",
-            wards: [{ wardsname: "7", ipads: [1, 8, 7, 6] }]
+            wards: [
+              { wardsname: "7", ipads: [1, 8, 7, 6] },
+              { wardsname: "9", ipads: [4, 6, 2, 0] }
+            ]
           }
         ]
       }
@@ -230,26 +262,14 @@ export class TableSortingExample implements OnInit {
 
   hello() {
     this.yow = " ";
-    this.selectionward.selected.forEach(department => {
-      
-      //this.yow += typeof department == typeof Ward )
-
-    console.log(typeof department);             // == "function"
-console.log(typeof department);            // == "object"
-
-console.log(department instanceof Department);     // == true
-console.log("3"+ department.constructor.name);   // == "Foo"
-console.log("4"+department.name )               // == "Foo"    
-
-console.log( Ward.prototype.isPrototypeOf(department)); 
-    }
-    );
+    this.selectionipad.selected.forEach(department => {
+      this.yow += " " + department.name + " " 
+    });
   }
-  
 
   hello1() {
     this.yow1 = " ";
-    this.selectionward.selected.forEach(
+    this.selectiondepartment.selected.forEach(
       ward =>
         (this.yow1 += " " + ward.name + " with parent " + ward.parent.name)
     );
@@ -257,67 +277,80 @@ console.log( Ward.prototype.isPrototypeOf(department));
 
   hello2() {
     this.yow2 = " ";
-    this.selectiondepartment.selected.forEach(
+    this.selectionward.selected.forEach(
       ipad =>
         (this.yow2 += " " + ipad.name + " with parent " + ipad.parent.name)
     );
-    this.yow3 = "parent has child: ";
+
+    /* this.yow3 = "parent has child: ";
     this.selectiondepartment.selected.forEach(ipad =>
       ipad.parent.child.forEach(
         ipadparent => (this.yow3 += ipadparent.name + " ")
       )
-    );
+    );*/
   }
 
   hello3() {
     var shower: Array<Requester>;
     shower = [];
-
+    console.log("hej3");
+    var logman = 0;
     if (this.selectionipad.selected.length != 0) {
       for (let i = 0; i < this.selectionipad.selected.length; i++) {
-       // this.requestSelector(this.selectionward.selected[i]);
+        console.log("hej");
+        this.requestSelector(this.selectionipad.selected[i]);
 
         var tempdepartment: Department = this.selectionipad.selected[i];
         if (this.selectionward.selected.length != 0) {
+          this.requestSelector(this.selectionward.selected[i]);
           for (let j = 0; j < tempdepartment.child.length; j++) {
-
             var tempward: Ward = tempdepartment.child[j];
-            if(this.selectiondepartment.selected.length != 0){
+            if (this.selectiondepartment.selected.length != 0) {
+              for (
+                let k = 0;
+                k < this.selectiondepartment.selected.length;
+                k++
+              ) {
+                this.requestSelector(this.selectiondepartment.selected[i]);
+                var tempRequest: Requester;
+                
+                logman++;
 
-              for (let k = 0; k < this.selectiondepartment.selected.length; k++) {
-              var tempRequest: Requester;
-
-              //tilføj et chartDataRequest
-
-
-              tempdepartment
-
-             }
+                //tilføj et chartDataRequest
+              }
             }
           }
         }
       }
     }
-
+    this.yow1 = " ";
+    this.selectiondepartment.selected.forEach(
+      ipad => (this.yow1 += ipad.name + " ")
+    );
+    this.yow2 = "" + logman;
     var show = new Requester();
   }
 
-  requestSelector(group: group){
-   var anyChildren = group.child.find(elem => {
-      return this.selectionward.isSelected(elem)
-    })
-    if(!anyChildren){
-    for (let i = 0; i < group.child.length; i++) {
-      this.requestSelector(group.child[i])
-    }
+  requestSelector(group: group) {
+    var anyChildren = group.child.find(elem => {
+      return this.selectionGroup.isSelected(elem);
+    });
+    console.log("hej5");
+    if (!anyChildren) {
+      console.log("hej4");
+      for (let i = 0; i < group.child.length; i++) {
+        console.log("hej2");
+        this.requestSelector(group.child[i]);
+      }
 
-    if(Department.prototype.isPrototypeOf(group)){
-      
-    }else if (Ward.prototype.isPrototypeOf(group)){
-    this.selectionward.select(group)
-    }else if (Ipad.prototype.isPrototypeOf(group)){
+      if (Department.prototype.isPrototypeOf(group)) {
+        this.selectionipad.select(group);
+      } else if (Ward.prototype.isPrototypeOf(group)) {
+        this.selectionward.select(group);
+      } else if (Ipad.prototype.isPrototypeOf(group)) {
+        this.selectiondepartment.select(group);
+      }
     }
-  }
   }
 }
 /**  Copyright 2018 Google Inc. All Rights Reserved.
