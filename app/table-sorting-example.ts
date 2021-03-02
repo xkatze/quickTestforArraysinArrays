@@ -163,37 +163,38 @@ export class TableSortingExample implements OnInit {
   }
 
   upwardsSelectIpad(spad: group) {
-
     this.selectionGroup.toggle(spad);
-    if(Zone.prototype.isPrototypeOf(spad)){
-
-    }else if(Department.prototype.isPrototypeOf(spad)){
-
-    }else if(Ward.prototype.isPrototypeOf(spad)){
-      if(!spad.parent.child.find(elem => {return this.selectionGroup.isSelected(elem); })){
+    if (Zone.prototype.isPrototypeOf(spad)) {
+    } else if (Department.prototype.isPrototypeOf(spad)) {
+    } else if (Ward.prototype.isPrototypeOf(spad)) {
+      if (
+        !spad.parent.child.find(elem => {
+          return this.selectionGroup.isSelected(elem);
+        })
+      ) {
         this.selectionGroup.deselect(spad.parent);
         this.selectiondepartment.deselect(spad.parent);
-      }else{
+      } else {
         this.selectionGroup.select(spad.parent);
         this.selectiondepartment.select(spad.parent);
       }
-
-    }else if(Ipad.prototype.isPrototypeOf(spad)){
-      if(!spad.parent.child.find(elem => {return this.selectionGroup.isSelected(elem); })){
+    } else if (Ipad.prototype.isPrototypeOf(spad)) {
+      if (
+        !spad.parent.child.find(elem => {
+          return this.selectionGroup.isSelected(elem);
+        })
+      ) {
         this.selectionGroup.deselect(spad.parent);
         this.selectionGroup.deselect(spad.parent.parent);
         this.selectionward.deselect(spad.parent);
         this.selectiondepartment.deselect(spad.parent.parent);
-      }else{
+      } else {
         this.selectionGroup.select(spad.parent);
         this.selectionGroup.select(spad.parent.parent);
         this.selectionward.select(spad.parent);
         this.selectiondepartment.select(spad.parent.parent);
       }
     }
-    
-
-    
   }
 
   @ViewChild(MatSort) sort: MatSort;
@@ -263,7 +264,7 @@ export class TableSortingExample implements OnInit {
   hello() {
     this.yow = " ";
     this.selectionipad.selected.forEach(department => {
-      this.yow += " " + department.name + " " 
+      this.yow += " " + department.name + " ";
     });
   }
 
@@ -302,20 +303,18 @@ export class TableSortingExample implements OnInit {
 
         var tempdepartment: Department = this.selectiondepartment.selected[i];
         if (this.selectionward.selected.length != 0) {
-          console.log("ward2")
+          console.log("ward2");
           for (let j = 0; j < tempdepartment.child.length; j++) {
             this.requestSelector(this.selectionward.selected[j]);
             console.log("ward");
             var tempward: Ward = tempdepartment.child[j];
             if (this.selectionipad.selected.length != 0) {
-              for (
-                let k = 0;
-                k < this.selectionipad.selected.length;
-                k++
-              ) {
+              for (let k = 0; k < this.selectionipad.selected.length; k++) {
+                console.log("hej9")
+                console.log(this.selectionipad.selected.length)
                 this.requestSelector(this.selectionipad.selected[k]);
                 var tempRequest: Requester;
-                
+
                 logman++;
 
                 //tilføj et chartDataRequest
@@ -330,30 +329,49 @@ export class TableSortingExample implements OnInit {
       ipad => (this.yow1 += ipad.name + " ")
     );
     this.yow2 = "" + logman;
+
+    this.yow = "" + this.selectionipad.selected.length;
+
+    this.yow3 = "" + this.selectionward.selected.length;
     var show = new Requester();
   }
 
   requestSelector(group: group) {
-     console.log("hej6");
+    console.log("hej6");
+    console.log(group);
+
+if(group != undefined){
+
     var anyChildren = group.child.find(elem => {
       return this.selectionGroup.isSelected(elem);
-    });
+    }) != undefined;
+    
     console.log("hej5");
-    if (!anyChildren) {
+    console.log("anyChildren: " + anyChildren)
+    if (!anyChildren) { // && !Ipad.prototype.isPrototypeOf(group)) {
       console.log("hej4");
       for (let i = 0; i < group.child.length; i++) {
         console.log("hej2");
+        console.log(group.child[i]);
         this.requestSelector(group.child[i]);
       }
     }
-  
-   if (Department.prototype.isPrototypeOf(group)) {
-        this.selectiondepartment.select(group);
-      } else if (Ward.prototype.isPrototypeOf(group)) {
-        this.selectionward.select(group);
-      } else if (Ipad.prototype.isPrototypeOf(group)) {
-        this.selectionipad.select(group);
-      }
+
+console.log("hej8")
+    if (Department.prototype.isPrototypeOf(group)) {
+      this.selectiondepartment.select(group);
+      this.selectionGroup.select(group);
+    } else if (Ward.prototype.isPrototypeOf(group)) {
+      this.selectionward.select(group);
+      this.selectionGroup.select(group);
+    } else if (Ipad.prototype.isPrototypeOf(group)) {
+      this.selectionipad.select(group);
+      this.selectionGroup.select(group);
+    }
+  }
+  else{
+    console.log("ERR: shouldnt be undefined!")
+  }
   }
 }
 /**  Copyright 2018 Google Inc. All Rights Reserved.
